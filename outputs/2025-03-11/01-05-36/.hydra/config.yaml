@@ -1,0 +1,44 @@
+trainer:
+  _target_: pytorch_lightning.Trainer
+  val_check_interval: 1.0
+  devices: ${machine.devices}
+  accelerator: ${machine.accelerator}
+  gradient_clip_val: 1
+  log_every_n_steps: 1000
+  num_nodes: ${machine.num_nodes}
+  precision: ${machine.precision}
+logger:
+  _target_: pytorch_lightning.loggers.WandbLogger
+  mode: online
+  project: SLM_finetuning
+  save_dir: ${paths.logs}/wandb
+  name: 10E_deepseek_7b_4bit_lora8
+  log_model: true
+seed: 1999
+max_epochs: 10
+train: true
+test: true
+log: true
+checkpoints: true
+load_checkpoint: false
+path_cpt: ${paths.save}/checkpoints/
+dataset:
+  hyperparams:
+    batch_size: 32
+    num_workers: 5
+    sliding_window: true
+model: {}
+machine:
+  devices: 1
+  num_workers: 10
+  progress_bar_refresh_rate: 2
+  sync_batchnorm: false
+  accelerator: gpu
+  precision: 16-mixed
+  num_nodes: 1
+  eval_gpu_type: null
+  strategy: single_device
+paths:
+  data: ./data/summarized_data/
+  logs: ./logs/
+  save: ./results/

@@ -1,0 +1,36 @@
+defaults:
+  - _self_
+  - dataset: TextSummary
+  - model: deepseek_7b_4bit
+  - machine: gpu
+  - paths: save
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  val_check_interval: 1.0
+  devices: ${machine.devices}
+  accelerator: ${machine.accelerator}
+  gradient_clip_val: 1
+  log_every_n_steps: 1000
+  num_nodes: ${machine.num_nodes}
+  precision: ${machine.precision}
+  
+logger:
+  _target_: pytorch_lightning.loggers.WandbLogger
+  mode: "online"
+  project: SLM_finetuning
+  save_dir: ${paths.logs}/wandb
+  name: 10E_deepseek_7b_4bit_lora8
+
+  log_model: True
+
+seed: 1999
+max_epochs: 10
+
+train: True
+test: True
+log: True
+checkpoints: True
+
+load_checkpoint: False
+path_cpt: ${paths.save}/checkpoints/ # Path to the checkpoint to load

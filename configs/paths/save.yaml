@@ -1,0 +1,3 @@
+data: ./data/summarized_data/
+logs: ./logs/
+save: ./results/
