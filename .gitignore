@@ -2,4 +2,8 @@ data/zhwiki-latest-pages-articles.xml.bz2
 output_wiki_texts/
 wikiextractor/
 data/output_dir/
+
+results/
+outputs/
+logs/
 *.json

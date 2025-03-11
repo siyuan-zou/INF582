@@ -64,18 +64,29 @@ def training(cfg: DictConfig, date=""):
     model.print_trainable_parameters()
 
     if cfg.train:
-        # 创建DataModule实例
-        data_module = TextSummaryDataModule(data_folder=f"{cfg.paths.data}", tokenizer=tokenizer, batch_size=32)
-        # 准备数据
-        data_module.prepare_data()
-        # 设置数据
-        data_module.setup()
+        # # 创建DataModule实例
+        # data_module = TextSummaryDataModule(data_folder=f"{cfg.paths.data}", tokenizer=tokenizer, batch_size=32)
+        # # 准备数据
+        # data_module.prepare_data()
+        # # 设置数据
+        # data_module.setup()
+
+        train_dataset = TextSummaryDataset(
+            pd.read_csv(f"{cfg.paths.data}/train.csv"),
+            tokenizer,
+            max_length=512
+        )
+        val_dataset = TextSummaryDataset(
+            pd.read_csv(f"{cfg.paths.data}/val.csv"),
+            tokenizer,
+            max_length=512
+        )
 
         trainer = Trainer(
             model=model,
             args=hydra.utils.instantiate(cfg.args),
-            train_dataset=data_module.train_dataset,
-            eval_dataset=data_module.val_dataset,
+            train_dataset=train_dataset,
+            eval_dataset=val_dataset,
         )
 
         trainer.train()
