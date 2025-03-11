@@ -47,15 +47,14 @@ class TextSummaryDataModule(LightningDataModule):
         """
         print("Stage", stage)
         start_time = time.time()
-        if stage == "fit" or stage is None:
-            # Create dataset instances
-            self.train_dataset = TextSummaryDataset(self.train_data, tokenizer=self.tokenizer)
-            self.val_dataset = TextSummaryDataset(self.val_data, tokenizer=self.tokenizer)
-            print(f"Train dataset size: {len(self.train_dataset)}")
-            print(f"Val dataset size: {len(self.val_dataset)}")
-        if stage == "test":
-            self.test_dataset = TextSummaryDataset(self.test_data, tokenizer=self.tokenizer)
-            print(f"Test dataset size: {len(self.test_dataset)}")
+        
+        # Create dataset instances
+        self.train_dataset = TextSummaryDataset(self.train_data, tokenizer=self.tokenizer)
+        self.val_dataset = TextSummaryDataset(self.val_data, tokenizer=self.tokenizer)
+        print(f"Train dataset size: {len(self.train_dataset)}")
+        print(f"Val dataset size: {len(self.val_dataset)}")
+        self.test_dataset = TextSummaryDataset(self.test_data, tokenizer=self.tokenizer)
+        print(f"Test dataset size: {len(self.test_dataset)}")
 
         end_time = time.time()
         print(f"Setup took {(end_time - start_time):.2f} seconds")

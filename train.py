@@ -17,7 +17,6 @@ from datetime import datetime
 from omegaconf import DictConfig
 
 torch.cuda.empty_cache()
-torch.cuda.reset_max_memory_allocated()
 
 def training(cfg: DictConfig, date=""):
     
@@ -29,17 +28,9 @@ def training(cfg: DictConfig, date=""):
         os.environ["WANDB_DIR"] = cfg.paths.logs
 
     ### callbacks ###
-    callbacks = []
     name = f"{date}_{cfg.logger.name}"
 
     ######### logger #########
-    if cfg.log:
-        logger = hydra.utils.instantiate(cfg.logger, id=name)
-        callbacks.extend(
-            [LearningRateMonitor(logging_interval="epoch"), SizeDatamodule(cfg.log)]
-        )
-    else:
-        logger = None
 
     ### load model ###
     
@@ -72,46 +63,27 @@ def training(cfg: DictConfig, date=""):
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
-    ### Resume Training ###
-    if cfg.load_checkpoint:
-        checkpoint = torch.load(cfg.path_cpt) # 
-        model.load_state_dict(checkpoint["state_dict"], strict=False)
-
-    ######### checkpoint #########
-    if cfg.checkpoints:
-        callbacks.append(
-            ModelCheckpoint(
-                save_last=True,
-                dirpath=f"{cfg.paths.save}/checkpoints/adapt_TS/anchoring",
-                filename=name,
-                every_n_epochs=1,
-                verbose=True,
-                monitor="loss",
-                mode="min",
-            )
-        )
-
     if cfg.train:
         # 创建DataModule实例
-        data_module = TextSummaryDataModule(data_folder=f"{cfg.paths.save.data}", tokenizer=tokenizer, batch_size=32)
+        data_module = TextSummaryDataModule(data_folder=f"{cfg.paths.data}", tokenizer=tokenizer, batch_size=32)
         # 准备数据
         data_module.prepare_data()
+        # 设置数据
+        data_module.setup()
 
-        trainer = hydra.utils.instantiate(
-                cfg.trainer,
-                logger=logger,
-                max_epochs=cfg.max_epochs,
-                callbacks=callbacks,
-            )
-        
-        trainer.fit(model, data_module)
-        
-        if cfg.test:      
-            data_module.cfg.dataset.hyperparams.batch_size = (
-                1  # for test batch = 1 -- different size of samples.
-            )
-            trainer.test(model, datamodule=data_module)
+        trainer = Trainer(
+            model=model,
+            args=hydra.utils.instantiate(cfg.args),
+            train_dataset=data_module.train_dataset,
+            eval_dataset=data_module.val_dataset,
+        )
+
+        trainer.train()
+
+        trainer.save_model("./results/deepseek7b_finetuned")  # 保存模型
+        tokenizer.save_pretrained("./results/deepseek7b_finetuned")  # 保存 tokenizer
     
+        
     ### END ###
     if cfg.log:
         wandb.finish()

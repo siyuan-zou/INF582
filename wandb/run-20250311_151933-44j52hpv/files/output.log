@@ -1,0 +1,68 @@
+ 37%|█████████████████████████████████                                                        | 253/680 [13:20<43:06,  6.06s/it]Traceback (most recent call last):
+  File "/Data/chen.ruikai/INF582/train.py", line 110, in <module>
+    main()
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/main.py", line 90, in decorated_main
+    _run_hydra(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/_internal/utils.py", line 389, in _run_hydra
+    _run_app(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/_internal/utils.py", line 452, in _run_app
+    run_and_report(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/_internal/utils.py", line 213, in run_and_report
+    return func()
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/_internal/utils.py", line 453, in <lambda>
+    lambda: hydra.run(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/_internal/hydra.py", line 119, in run
+    ret = run_job(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/hydra/core/utils.py", line 186, in run_job
+    ret.return_value = task_function(task_cfg)
+  File "/Data/chen.ruikai/INF582/train.py", line 105, in main
+    training(cfg=cfg, date=date_time)
+  File "/Data/chen.ruikai/INF582/train.py", line 81, in training
+    trainer.train()
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/trainer.py", line 2241, in train
+    return inner_training_loop(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/trainer.py", line 2548, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/trainer.py", line 3698, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/trainer.py", line 3759, in compute_loss
+    outputs = model(**inputs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/accelerate/utils/operations.py", line 819, in forward
+    return model_forward(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/accelerate/utils/operations.py", line 807, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+    return func(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/peft/peft_model.py", line 849, in forward
+    return self.get_base_model()(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/models/llama/modeling_llama.py", line 842, in forward
+    outputs = self.model(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/models/llama/modeling_llama.py", line 594, in forward
+    layer_outputs = decoder_layer(
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/models/llama/modeling_llama.py", line 351, in forward
+    hidden_states = self.post_attention_layernorm(hidden_states)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Data/chen.ruikai/CV/lib/python3.9/site-packages/transformers/models/llama/modeling_llama.py", line 71, in forward
+    hidden_states = hidden_states.to(torch.float32)
+KeyboardInterrupt

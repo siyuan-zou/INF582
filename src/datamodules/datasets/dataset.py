@@ -44,9 +44,13 @@ class TextSummaryDataset(Dataset):
             max_length=self.max_length,
             return_tensors='pt'
         )
+        
+        # Handle padding in labels to avoid loss computation on padding tokens
+        labels = summary_enc['input_ids'].squeeze(0)
+        labels[labels == self.tokenizer.pad_token_id] = -100
 
         return {
             'input_ids': text_enc['input_ids'].squeeze(0),
             'attention_mask': text_enc['attention_mask'].squeeze(0),
-            'labels': summary_enc['input_ids'].squeeze(0)  # 目标 summary 作为 labels
+            'labels': labels  # target summary as labels
         }

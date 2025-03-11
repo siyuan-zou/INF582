@@ -1,0 +1,49 @@
+args:
+  _target_: transformers.TrainingArguments
+  output_dir: ${paths.save}
+  evaluation_strategy: epoch
+  learning_rate: 0.0003
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  num_train_epochs: 1
+  weight_decay: 0.01
+  logging_dir: ${paths.logs}
+  fp16: true
+  report_to: wandb
+  run_name: 1E_deepseek_7b_4bit_lora8
+  logging_steps: 5
+logger:
+  _target_: pytorch_lightning.loggers.WandbLogger
+  mode: online
+  project: SLM_finetuning
+  save_dir: ${paths.logs}/wandb
+  name: 10E_deepseek_7b_4bit_lora8
+  log_model: true
+seed: 1999
+max_epochs: 10
+train: true
+test: true
+log: true
+checkpoints: true
+load_checkpoint: false
+path_cpt: ${paths.save}/checkpoints/
+dataset:
+  hyperparams:
+    batch_size: 32
+    num_workers: 5
+    sliding_window: true
+model: {}
+machine:
+  devices: 1
+  num_workers: 10
+  progress_bar_refresh_rate: 2
+  sync_batchnorm: false
+  accelerator: gpu
+  precision: 16
+  num_nodes: 1
+  eval_gpu_type: null
+  strategy: single_device
+paths:
+  data: ./data/summarized_data/
+  logs: ./logs/
+  save: ./results/
